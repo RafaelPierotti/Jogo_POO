@@ -13,10 +13,13 @@ largura = 640
 altura = 700
 
 tela = Tela(largura, altura)
-carro = Carro(x=largura// y=altura/2, caminho='jogo_carro.png')
+carro = Carro(x=largura//2, y=altura//1.3, caminho='jogo_carro.png')
 musica_moeda = pygame.mixer.Sound('smw_coin.wav')
 
 relogio = pygame.time.Clock()
+
+OBSTACULO_LARGURA = 70
+OBSTACULO_ALTURA = 90
 
 obstaculoX = randint(40, largura - OBSTACULO_LARGURA)
 obstaculoY = randint(40, altura - OBSTACULO_ALTURA)
