@@ -33,7 +33,7 @@ obstaculos = [
 
 DISTANCIA_MINIMA = 200
 while abs(obstaculos[0].rect.y - obstaculos[1].rect.y) < DISTANCIA_MINIMA:
-    obstaculos[1].reposicionar()
+    obstaculos[1].reposicionar() #garante que dois objetos não iniciem grudados
 
 obstaculoX = randint(40, largura - OBSTACULO_LARGURA)
 obstaculoY = randint(40, altura - OBSTACULO_ALTURA)
@@ -51,7 +51,7 @@ moedas_total = 0
 fonte = pygame.font.SysFont('Arial', 30, True, False)
 
 
-while True:
+while True: #loop principal
     relogio.tick(velocidade)
 
     for event in pygame.event.get():
@@ -60,7 +60,7 @@ while True:
             exit()
 
     teclas = pygame.key.get_pressed()
-    carro.mover(teclas, esquerda=pygame.K_a, direita=pygame.K_d)
+    carro.mover(teclas, esquerda=pygame.K_a, direita=pygame.K_d) #movimentação do jogador
 
 
     if carro.rect.left < 100: #limitando carro na pista
@@ -72,13 +72,13 @@ while True:
     tela.desenhar_fundo()
     carro.desenhar(tela.tela)
 
-    for obstaculo in obstaculos:
+    for obstaculo in obstaculos: #verifica colisão com ocarro
         if obstaculo.colidiu(carro.rect):
-            
+
             if carro.rect.bottom > obstaculo.rect.top and carro.rect.centery < obstaculo.rect.centery:
-                obstaculo.parado = True
+                obstaculo.parado = True #carro beteu de frente para obstaculo
                 if moedas_total > 0:
-                    moedas_total -= 1
+                    moedas_total -= 1 #perde uma moeda
             else:
                 obstaculo.parado = False
         else:
@@ -87,21 +87,21 @@ while True:
         obstaculo.atualizar()
         obstaculo.desenhar(tela.tela)
 
-    moeda.atualizar()d
+    moeda.atualizar()
 
-    for obstaculo in obstaculos:
+    for obstaculo in obstaculos: #moeda em cima do obstaculo ela é colocada em cima dela
         if moeda.rect.colliderect(obstaculo.rect):
             moeda.rect.bottom = obstaculo.rect.top
 
     moeda.desenhar(tela.tela)
 
-    if moeda.colidiu(carro.rect):
-        moedas_total += 1
-        musica_moeda.play()
-        moeda.reposicionar()
+    if moeda.colidiu(carro.rect): #encostou na moeda
+        moedas_total += 1 #ganha moeda
+        musica_moeda.play() #toca musica
+        moeda.reposicionar() #reposiciona
 
     
-    texto =  fonte.render(f"Moedas: {moedas_total}", True, (0, 0, 0))
+    texto =  fonte.render(f"Moedas: {moedas_total}", True, (0, 0, 0)) #exibe o texto
     tela.tela.blit(texto, (10, 10))
 
     tela.atualizar()
