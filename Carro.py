@@ -1,6 +1,7 @@
 import pygame
+from Objetos import Objetos
 
-class Carro:
+class Carro(Objetos):
     def __init__(self, x, y, caminho): #construtor
         self.imagem = pygame.image.load(caminho) #carrega imagem do carro
         self.imagem = pygame.transform.scale(self.imagem, (200/2, 420/2)) #imagem fica menor

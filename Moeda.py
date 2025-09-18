@@ -1,7 +1,9 @@
 import pygame
 from random import randint
 
-class Moeda:
+from Objetos import Objetos
+
+class Moeda(Objetos):
     def __init__(self, largura_tela, altura_tela, tamanho=40, vel_y=5): #construtor
         self.largura_tela = largura_tela
         self.altura_tela = altura_tela

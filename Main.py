@@ -35,6 +35,8 @@ DISTANCIA_MINIMA = 200
 while abs(obstaculos[0].rect.y - obstaculos[1].rect.y) < DISTANCIA_MINIMA:
     obstaculos[1].reposicionar() #garante que dois objetos não iniciem grudados
 
+objetos = [moeda] + obstaculos + [carro]
+
 obstaculoX = randint(40, largura - OBSTACULO_LARGURA)
 obstaculoY = randint(40, altura - OBSTACULO_ALTURA)
 
@@ -70,9 +72,9 @@ while True: #loop principal
         carro.rect.right = 540
 
     tela.desenhar_fundo()
-    carro.desenhar(tela.tela)
 
-    for obstaculo in obstaculos: #verifica colisão com ocarro
+
+    for obstaculo in obstaculos: #verifica colisão com o carro
         if obstaculo.colidiu(carro.rect):
 
             if carro.rect.bottom > obstaculo.rect.top and carro.rect.centery < obstaculo.rect.centery:
@@ -93,7 +95,8 @@ while True: #loop principal
         if moeda.rect.colliderect(obstaculo.rect):
             moeda.rect.bottom = obstaculo.rect.top
 
-    moeda.desenhar(tela.tela)
+    for objeto in objetos:
+        objeto.desenhar(tela.tela) #desenha todas as classes que herdarem de objeto
 
     if moeda.colidiu(carro.rect): #encostou na moeda
         moedas_total += 1 #ganha moeda

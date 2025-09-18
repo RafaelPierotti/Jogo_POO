@@ -1,8 +1,11 @@
 import pygame
 from random import randint
 
-class Obstaculo:
-    def __init__(self, largura_tela, altura_tela, caminho, largura=150, altura=150, vel_y=5): #construtor
+from Objetos import Objetos
+
+
+class Obstaculo(Objetos):
+    def __init__(self, largura_tela, altura_tela, caminho, largura=100, altura=150, vel_y=5): #construtor
         self.largura_tela = largura_tela
         self.altura_tela = altura_tela
         self.vel_y = vel_y
