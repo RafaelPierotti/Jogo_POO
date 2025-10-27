@@ -1,33 +1,39 @@
 import pygame
 from random import randint
 
-from Objetos import Objetos
-
-class Moeda(Objetos):
-    def __init__(self, largura_tela, altura_tela, tamanho=40, vel_y=5): #construtor
+class Moeda:
+    def __init__(self, largura_tela, altura_tela, tamanho=50, vel_y=5):
         self.largura_tela = largura_tela
         self.altura_tela = altura_tela
         self.tamanho = tamanho
         self.vel_y = vel_y
+
+        # Posição inicial aleatória
         self.x = randint(100, 470)
         self.y = randint(-600, -100)
-        self.rect = pygame.Rect(self.x - tamanho // 2, self.y - tamanho // 2, tamanho, tamanho) #cria colisão da moeda
 
-    def atualizar(self): #move moeda para baixo
+        # Carrega e redimensiona a imagem da moeda
+        self.imagem = pygame.image.load("moeda.png")  # nome do seu arquivo
+        self.imagem = pygame.transform.scale(self.imagem, (self.tamanho, self.tamanho))
+
+        # Retângulo de colisão
+        self.rect = self.imagem.get_rect(center=(self.x, self.y))
+
+    def atualizar(self):
         self.y += self.vel_y
-        self.rect.y = self.y - self.tamanho // 2
+        self.rect.centery = self.y
 
-        if self.y > self.altura_tela: #passa limite da tela, reposiciona
+        # Quando sair da tela, reposiciona
+        if self.y > self.altura_tela:
             self.reposicionar()
 
     def desenhar(self, tela):
-        pygame.draw.circle(tela, (255, 223, 0), (self.x, self.y), self.tamanho // 2)
+        tela.blit(self.imagem, self.rect)
 
-    def colidiu(self, carro_rect): #colisão da moeda
+    def colidiu(self, carro_rect):
         return self.rect.colliderect(carro_rect)
 
-    def reposicionar(self):#reposiciona a moeda
+    def reposicionar(self):
         self.x = randint(100, 470)
         self.y = randint(-600, -100)
-        self.rect.x = self.x - self.tamanho // 2 #posição aleatória
-        self.rect.y = self.y - self.tamanho // 2
+        self.rect.center = (self.x, self.y)
