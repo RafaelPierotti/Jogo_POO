@@ -15,6 +15,7 @@ class Obstaculo(Objetos):
         x = randint(100, 470)
         y = randint(-600, -100)
         self.rect = self.imagem.get_rect(topleft=(x, y))#posiciona obstaculo
+        self.rect.inflate_ip(-30, -40)
 
     def atualizar(self):
         if not self.parado:  # só se move se não estiver parado

@@ -111,7 +111,83 @@ def tela_inicial():
 nome_jogador = tela_inicial()
 print(f"Jogador: {nome_jogador}")  # depois pode salvar no banco
 
-# === LOOP PRINCIPAL DO JOGO ===
+
+def tela_game_over():
+    #carrega o logo
+    logo = pygame.image.load("logo1.png")
+    logo = pygame.transform.scale(logo, (400, 200))
+
+    #fontes
+    fonte_titulo = pygame.font.SysFont('Arial', 50, True)
+    fonte_botao = pygame.font.SysFont('Arial', 40, True)
+
+    # cores
+    cor_fundo = (0, 0, 0)
+    cor_botao = (200, 0, 0)
+    cor_botao_hover = (255, 0, 0)
+    cor_botao_sair = (80, 80, 80)
+    cor_botao_sair_hover = (120, 120, 120)
+
+    # botões (centralizados)
+    espacamento = 20
+    botao_largura = 200
+    botao_altura = 60
+
+    botao_reiniciar = pygame.Rect(largura // 2 - botao_largura // 2, 480, botao_largura, botao_altura)
+    botao_sair = pygame.Rect(largura // 2 - botao_largura // 2, 480 + botao_altura + espacamento, botao_largura, botao_altura)
+
+    #loop principal da tela de game over
+    while True:
+        tela.tela.fill(cor_fundo)
+
+        # logo e título
+        tela.tela.blit(logo, (largura // 2 - logo.get_width() // 2, 150))
+        titulo = fonte_titulo.render("GAME OVER", True, (255, 255, 255))
+        tela.tela.blit(titulo, (largura // 2 - titulo.get_width() // 2, 380))
+
+        #posição do mouse
+        mouse = pygame.mouse.get_pos()
+
+        # botão reiniciar
+        # muda de cor quando o mouse passa por cima
+        if botao_reiniciar.collidepoint(mouse):
+            pygame.draw.rect(tela.tela, cor_botao_hover, botao_reiniciar, border_radius=8)
+        else:
+            pygame.draw.rect(tela.tela, cor_botao, botao_reiniciar, border_radius=8)
+        texto_reiniciar = fonte_botao.render("Reiniciar", True, (255, 255, 255))
+        tela.tela.blit(
+            texto_reiniciar,
+            (botao_reiniciar.centerx - texto_reiniciar.get_width() // 2,
+             botao_reiniciar.centery - texto_reiniciar.get_height() // 2)
+        )
+
+        # botão sair
+        if botao_sair.collidepoint(mouse):
+            pygame.draw.rect(tela.tela, cor_botao_sair_hover, botao_sair, border_radius=8)
+        else:
+            pygame.draw.rect(tela.tela, cor_botao_sair, botao_sair, border_radius=8)
+        texto_sair = fonte_botao.render("Sair", True, (255, 255, 255))
+        tela.tela.blit(
+            texto_sair,
+            (botao_sair.centerx - texto_sair.get_width() // 2,
+             botao_sair.centery - texto_sair.get_height() // 2)
+        )
+
+        # Atualiza tudo que foi desenhado na tela
+        pygame.display.update()
+
+        # eventos (cliques, fechar janela, etc)
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit() #aqui fecha o jogo
+            elif evento.type == pygame.MOUSEBUTTONDOWN:
+                if botao_reiniciar.collidepoint(evento.pos):
+                    return  # volta pro jogo
+                elif botao_sair.collidepoint(evento.pos):
+                    pygame.quit()
+                    exit() #novamente fecha o jogo
+
 while True:
     relogio.tick(velocidade)
 
@@ -132,17 +208,25 @@ while True:
     tela.desenhar_fundo()
     carro.desenhar(tela.tela)
 
+    #colisão com o obstáculo
+    colisao = False
     for obstaculo in obstaculos:
         if obstaculo.colidiu(carro.rect):
-            if carro.rect.bottom > obstaculo.rect.top and carro.rect.centery < obstaculo.rect.centery:
-                obstaculo.parado = True
-                if moedas_total > 0:
-                    moedas_total -= 1
-            else:
-                obstaculo.parado = False
-        else:
-            obstaculo.parado = False
+            colisao = True
+            break  # se colidiu com qualquer obstáculo, encerra o loop
 
+    if colisao:
+        tela_game_over()  # mostra a tela de game over
+        # Reinicia o jogo
+        carro.rect.centerx = largura // 2
+        carro.rect.y = altura // 1.5 #reposiciona o carro de onde começou
+        moedas_total = 0
+        for obs in obstaculos:  # reposiciona todos os obstáculos
+            obs.reposicionar()
+        continue  # volta pro início do loop
+
+    # --- ATUALIZA OBSTÁCULOS E MOEDAS ---
+    for obstaculo in obstaculos:
         obstaculo.atualizar()
         obstaculo.desenhar(tela.tela)
 
@@ -159,6 +243,7 @@ while True:
         musica_moeda.play()
         moeda.reposicionar()
 
+    # --- EXIBE PONTUAÇÃO ---
     texto = fonte.render(f"Moedas: {moedas_total}", True, (0, 0, 0))
     tela.tela.blit(texto, (10, 10))
 

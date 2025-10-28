@@ -6,6 +6,8 @@ class Carro(Objetos):
         self.imagem = pygame.image.load(caminho) #carrega imagem do carro
         self.imagem = pygame.transform.scale(self.imagem, (200/2, 420/2)) #imagem fica menor
         self.rect = self.imagem.get_rect() #cria a colisão do carro
+        self.rect.inflate_ip(-40, -60)
+        self.rect.move_ip(0, -10)
         self.rect.x = x
         self.rect.y = y
         self.velocidade = 10 #"hertz" do carro // pixels por segundo
