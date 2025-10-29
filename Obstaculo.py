@@ -31,4 +31,13 @@ class Obstaculo(Objetos):
         tela.blit(self.imagem, self.rect)
 
     def colidiu(self, carro_rect):
-        return self.rect.colliderect(carro_rect)
+        colisao_x = (carro_rect.left < self.rect.right) and (carro_rect.right > self.rect.left)
+
+        if not colisao_x:
+            return False
+
+        acertou_topo = self.rect.bottom >= carro_rect.top
+
+        colisao_fresca = self.rect.bottom <= (carro_rect.top + self.vel_y)
+
+        return colisao_x and acertou_topo and colisao_fresca

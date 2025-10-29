@@ -84,10 +84,10 @@ while True:
         teclas = pygame.key.get_pressed()
         carro.mover(teclas, esquerda=pygame.K_a, direita=pygame.K_d)
 
-        if carro.rect.left < 100:
-            carro.rect.left = 100
-        if carro.rect.right > 540:
-            carro.rect.right = 540
+        if carro.rect.left < 0:
+            carro.rect.left = 0
+        if carro.rect.right > largura:
+            carro.rect.right = largura
 
         tela.desenhar_fundo()
         carro.desenhar(tela.tela)

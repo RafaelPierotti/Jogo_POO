@@ -10,9 +10,18 @@ class Carro(Objetos):
         self.rect.move_ip(0, -10)
         self.rect.x = x
         self.rect.y = y
-        self.velocidade = 10 #"hertz" do carro // pixels por segundo
+        self.velocidade_normal = 10 #"hertz" do carro // pixels por segundo
+        self.velocidade_lenta = 4
 
     def mover(self, teclas, esquerda, direita): #metodo de movimentação
+        limite_pista_esq = 100
+        limite_pista_direita = 540
+
+        velocidade_atual = self.velocidade_normal
+
+        if self.rect.left < limite_pista_esq or self.rect.right > limite_pista_direita:
+            velocidade_atual = self.velocidade_lenta
+
         if teclas[esquerda]:
             self.rect.x -= 10 #movimenta 10 para esquerda
         if teclas[direita]:
