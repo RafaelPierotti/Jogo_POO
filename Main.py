@@ -9,6 +9,8 @@ from Moeda import Moeda
 from Obstaculo import Obstaculo
 
 from Database import session
+from audio_manager import init_audio, audio
+init_audio("sons")
 
 def reiniciar_jogo(carro, obstaculos, largura, altura, dist_minima):
     carro.rect.centerx = largura // 2
