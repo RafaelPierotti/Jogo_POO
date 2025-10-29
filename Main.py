@@ -34,11 +34,11 @@ velocidade = 120
 
 tela = Tela(largura, altura)
 moeda = Moeda(largura_tela=largura, altura_tela=altura)
-musica_moeda = pygame.mixer.Sound('smw_coin.wav')
+musica_moeda = pygame.mixer.Sound('assets/smw_coin.wav')
 
 obstaculos = [
-    Obstaculo(largura, altura, "parede.png"),
-    Obstaculo(largura, altura, "parede.png")
+    Obstaculo(largura, altura, "assets/parede.png"),
+    Obstaculo(largura, altura, "assets/parede.png")
 ]
 
 relogio = pygame.time.Clock()

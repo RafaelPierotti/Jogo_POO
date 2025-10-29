@@ -18,10 +18,10 @@ class Tela:
         pygame.display.set_caption('Racing Coders') #nome da janela do jogo
 
         #Fundo da tela
-        self.fundo_img = pygame.image.load('estrada.png') #pega imagem da estrada
+        self.fundo_img = pygame.image.load('assets/estrada.png') #pega imagem da estrada
         self.fundo_img = pygame.transform.scale(self.fundo_img, (largura, altura))
 
-        self.logo = pygame.image.load("logo1.png")
+        self.logo = pygame.image.load("assets/logo1.png")
         self.logo = pygame.transform.scale(self.logo, (400, 200))
 
         self.fonte_input = pygame.font.SysFont('Arial', 35, True, False)

@@ -13,7 +13,7 @@ class Moeda:
         self.y = randint(-600, -100)
 
         # Carrega e redimensiona a imagem da moeda
-        self.imagem = pygame.image.load("moeda.png")  # nome do seu arquivo
+        self.imagem = pygame.image.load("assets/moeda.png")  # nome do seu arquivo
         self.imagem = pygame.transform.scale(self.imagem, (self.tamanho, self.tamanho))
 
         # Retângulo de colisão

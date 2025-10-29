@@ -1,7 +1,7 @@
 from Carro import Carro
 
-IMG_PORSCHE = 'porsche.png'
-IMG_F1 = 'jogo_carro.png'
+IMG_PORSCHE = 'assets/porsche.png'
+IMG_F1 = 'assets/jogo_carro.png'
 
 class Porsche(Carro):
     def __init__(self,x, y):
