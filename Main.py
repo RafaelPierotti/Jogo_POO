@@ -62,7 +62,9 @@ while True:
 
             if event.type == KEYDOWN: #Pressiona o ESC
                 if event.key == K_ESCAPE:
-                    # Chama a nova tela de pausa
+                     if "interface" in audio:
+                    audio["interface"].play()
+                         # Chama a nova tela de pausa
                     acao_pausa = tela.tela_pausa(session)
 
                     if acao_pausa == "CONTINUAR":
@@ -99,7 +101,14 @@ while True:
                 break
 
         if colisao:
+            if "colisao" in audio:
+            audio["colisao"].play()
+           
             acao = tela.tela_game_over(session, usuario_atual, moedas_total)
+
+             if "gameover" in audio:
+            audio["gameover"].play()
+            
 
             if acao == "REINICIAR":
                 moedas_total = reiniciar_jogo(carro, obstaculos, largura, altura, DISTANCIA_MINIMA)
@@ -128,7 +137,8 @@ while True:
 
         if moeda.colidiu(carro.rect):
             moedas_total += 1
-            musica_moeda.play()
+               if "moeda" in audio:
+            audio["moeda"].play()
             moeda.reposicionar()
 
         texto_pontos = fonte_jogo.render(f"Moedas: {moedas_total}", True, (0, 0, 0))
