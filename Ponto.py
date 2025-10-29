@@ -4,12 +4,12 @@ from datetime import datetime
 from Usuario import Base
 
 class Ponto(Base):
-    __tablename__ = 'Ponto'
+    __tablename__ = 'ponto'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     usuario_id = Column(Integer, ForeignKey('usuario.id'))
     pontuacao = Column(Integer, nullable=False)
-    data = Column(DateTime, default=datetime.utcnow)
+    tempo_segundos = Column(Integer, nullable=False)
 
     usuario = relationship("Usuario", back_populates="pontos")
 

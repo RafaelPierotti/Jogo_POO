@@ -10,9 +10,12 @@ from Obstaculo import Obstaculo
 
 from Database import session
 
+from Veiculos import Porsche, F1
+
 def reiniciar_jogo(carro, obstaculos, largura, altura, dist_minima):
     carro.rect.centerx = largura // 2
     carro.rect.y = altura // 1.5
+    carro.resetar_vida()
     for obs in obstaculos:
         obs.reposicionar()
 
@@ -30,7 +33,6 @@ DISTANCIA_MINIMA = 200
 velocidade = 120
 
 tela = Tela(largura, altura)
-carro = Carro(x=largura // 2, y=altura // 1.5, caminho='jogo_carro.png')
 moeda = Moeda(largura_tela=largura, altura_tela=altura)
 musica_moeda = pygame.mixer.Sound('smw_coin.wav')
 
@@ -47,7 +49,13 @@ while True:
 
     usuario_atual = tela.tela_inicial(session)
 
+    carro_escolhido = tela.tela_escolha_carro(session)
+
+    carro = carro_escolhido(x=largura/2, y=altura/1.5)
+
     moedas_total = reiniciar_jogo(carro, obstaculos, largura, altura, DISTANCIA_MINIMA)
+
+    start_time_ticks = pygame.time.get_ticks()
 
     rodando_jogo = True
 
@@ -95,14 +103,25 @@ while True:
         colisao = False
         for obstaculo in obstaculos:
             if obstaculo.colidiu(carro.rect):
-                colisao = True
-                break
+                #colisao = True
+                #break
+
+                if carro.receber_dano(1):
+                    obstaculo.reposicionar()
+
+                if carro.vida_atual <= 0:
+                    colisao = True
+                    break
 
         if colisao:
-            acao = tela.tela_game_over(session, usuario_atual, moedas_total)
+            end_time_ticks = pygame.time.get_ticks()
+            duracao_segundos = (end_time_ticks - start_time_ticks) // 1000
+
+            acao = tela.tela_game_over(session, usuario_atual, moedas_total, duracao_segundos)
 
             if acao == "REINICIAR":
                 moedas_total = reiniciar_jogo(carro, obstaculos, largura, altura, DISTANCIA_MINIMA)
+                start_time_ticks = pygame.time.get_ticks()
                 continue  # Volta ao início do loop 'rodando_jogo'
 
             elif acao == "MENU":
@@ -136,5 +155,16 @@ while True:
 
         texto_nome = fonte_jogo.render(f"Jogador: {usuario_atual.nome}", True, (0, 0, 0))
         tela.tela.blit(texto_nome, (10, 40))
+
+        # Exibe a vida
+        texto_vida = fonte_jogo.render(f"Vida: {carro.vida_atual} / {carro.vida_maxima}", True, (255, 0, 0))
+        tela.tela.blit(texto_vida, (largura - texto_vida.get_width() - 10, 10))
+
+        # Exibe o Tempo
+        tempo_atual_seg = (pygame.time.get_ticks() - start_time_ticks) // 1000
+        minutos = tempo_atual_seg // 60
+        segundos = tempo_atual_seg % 60
+        texto_tempo = fonte_jogo.render(f"Tempo: {minutos:02}:{segundos:02}", True, (0, 0, 0))
+        tela.tela.blit(texto_tempo, (largura - texto_tempo.get_width() - 10, 40))
 
         tela.atualizar()

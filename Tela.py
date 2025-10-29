@@ -5,6 +5,7 @@ from sqlalchemy import desc
 
 from Usuario import Usuario
 from Ponto import Ponto
+from Veiculos import Porsche
 
 LARGURA = 640 #define o tamanho da tela
 ALTURA = 700
@@ -30,6 +31,7 @@ class Tela:
         self.fonte_titulo_gameover = pygame.font.SysFont('Impact', 70)  # <--- Fonte mantida para Game Over
         self.fonte_pontos = pygame.font.SysFont('Arial', 28)
         self.fonte_titulo_pontos = pygame.font.SysFont('Arial', 40, True)
+        self.fonte_desc = pygame.font.SysFont('Arial', 24)
 
     def desenhar_fundo(self):
         self.tela.blit(self.fundo_img, (0, 0))
@@ -160,7 +162,13 @@ class Tela:
                 nome_usuario = (ponto.usuario.nome[:15] + '...') if len(ponto.usuario.nome) > 15 else ponto.usuario.nome
                 txt_nome = fonte_pontos.render(nome_usuario, True, cor_texto)
                 txt_pontos = fonte_pontos.render(str(ponto.pontuacao), True, cor_texto)
-                txt_data = fonte_pontos.render(ponto.data.strftime("%d/%m/%y %H:%M"), True, cor_texto)
+
+                segundos_totais = ponto.tempo_segundos
+                minutos = segundos_totais // 60
+                segundos_restantes = segundos_totais % 60
+                tempo_formatado = f"{minutos:02}:{segundos_restantes:02}"  # Formato 00:00
+
+                txt_tempo = fonte_pontos.render(tempo_formatado, True, cor_texto)
 
                 self.tela.blit(txt_nome, (50, y_pos))
                 self.tela.blit(txt_pontos, (300, y_pos))
@@ -188,10 +196,10 @@ class Tela:
                         return
 
     #Metodo importado da main
-    def tela_game_over(self, session, usuario, pontuacao_final):
+    def tela_game_over(self, session, usuario, pontuacao_final, duracao_segundos):
         # Tenta salvar o ponto
         try:
-            novo_ponto = Ponto(usuario_id=usuario.id, pontuacao=pontuacao_final)
+            novo_ponto = Ponto(usuario_id=usuario.id, pontuacao=pontuacao_final, tempo_segundos=duracao_segundos)
             session.add(novo_ponto)
             session.commit()
             print(f"Pontuação {pontuacao_final} salva para o usuário {usuario.nome}")
@@ -397,3 +405,96 @@ class Tela:
 
                     if botao_sair.collidepoint(evento.pos):
                         return "SAIR"
+
+    def tela_escolha_carro(self, session):
+        carros_disponiveis = [Porsche]
+        selecao_idx = 0
+
+        cor_fundo = (0, 0, 0)
+        cor_texto = (255, 255, 255)
+        cor_selecionado = (255, 215, 0)  # Dourado
+        cor_botao = (0, 150, 0)
+        cor_botao_hover = (0, 200, 0)
+
+        botao_confirmar = pygame.Rect(self.largura // 2 - 100, self.altura - 100, 200, 50)
+
+        imagens_carros = []
+        for classe_carro in carros_disponiveis:
+            # Instancia temporariamente para pegar a imagem e dados
+            carro_temp = classe_carro(0, 0)
+            img = pygame.transform.scale(carro_temp.imagem, (100, 210))  # Tamanho para exibição
+            imagens_carros.append((img, carro_temp.nome, carro_temp.descricao))
+
+        while True:
+            self.tela.fill(cor_fundo)
+            mouse = pygame.mouse.get_pos()
+
+            # Título
+            titulo = self.fonte_titulo_pontos.render("Escolha seu Carro", True, cor_texto)
+            self.tela.blit(titulo, (self.largura // 2 - titulo.get_width() // 2, 50))
+
+            # --- Desenha os carros e stats ---
+            total_carros = len(carros_disponiveis)
+            espacamento_x = self.largura // (total_carros + 1)
+
+            for i, (img, nome, desc) in enumerate(imagens_carros):
+                x_pos = espacamento_x * (i + 1)
+
+                # Desenha a imagem
+                img_rect = img.get_rect(center=(x_pos, self.altura // 2 - 50))
+                self.tela.blit(img, img_rect)
+
+                # Desenha o nome
+                cor_nome = cor_selecionado if i == selecao_idx else cor_texto
+                texto_nome = self.fonte_botao_media.render(nome, True, cor_nome)
+                self.tela.blit(texto_nome, (x_pos - texto_nome.get_width() // 2, self.altura // 2 + 80))
+
+                # Desenha a descrição
+                y_desc = self.altura // 2 + 130
+                for linha in desc:
+                    texto_desc = self.fonte_desc.render(linha, True, cor_texto)
+                    self.tela.blit(texto_desc, (x_pos - texto_desc.get_width() // 2, y_desc))
+                    y_desc += 30
+
+                # Borda de seleção
+                if i == selecao_idx:
+                    pygame.draw.rect(self.tela, cor_selecionado, img_rect.inflate(10, 10), 3, border_radius=5)
+
+            # Botão Confirmar
+            cor_b = cor_botao_hover if botao_confirmar.collidepoint(mouse) else cor_botao
+            pygame.draw.rect(self.tela, cor_b, botao_confirmar, border_radius=8)
+            texto_b = self.fonte_botao_media.render("Confirmar", True, cor_texto)
+            self.tela.blit(texto_b, (botao_confirmar.centerx - texto_b.get_width() // 2,
+                                     botao_confirmar.centery - texto_b.get_height() // 2))
+
+            self.atualizar()
+
+            # --- Eventos ---
+            for evento in pygame.event.get():
+                if evento.type == pygame.QUIT:
+                    session.close()
+                    pygame.quit()
+                    exit()
+
+                if evento.type == pygame.KEYDOWN:
+                    # Seleciona com as setas
+                    if evento.key == pygame.K_LEFT:
+                        selecao_idx = (selecao_idx - 1) % total_carros
+                    if evento.key == pygame.K_RIGHT:
+                        selecao_idx = (selecao_idx + 1) % total_carros
+                    if evento.key == pygame.K_RETURN:  # Confirma com Enter
+                        return carros_disponiveis[selecao_idx]
+
+                if evento.type == pygame.MOUSEBUTTONDOWN:
+                    if botao_confirmar.collidepoint(evento.pos):
+                        # Retorna a CLASSE do carro selecionado
+                        return carros_disponiveis[selecao_idx]
+
+                    # Permite clicar no carro para selecionar
+                    for i, (img, _, _) in enumerate(imagens_carros):
+                        x_pos = espacamento_x * (i + 1)
+                        img_rect = img.get_rect(center=(x_pos, self.altura // 2 - 50))
+                        if img_rect.inflate(20, 20).collidepoint(evento.pos):
+                            selecao_idx = i
+                            break
+
