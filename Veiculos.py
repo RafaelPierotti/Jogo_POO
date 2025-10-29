@@ -3,7 +3,6 @@ from Carro import Carro
 IMG_PORSCHE = 'porsche.png'
 IMG_F1 = 'jogo_carro.png'
 
-
 class Porsche(Carro):
     def __init__(self,x, y):
         super().__init__(x, y, IMG_PORSCHE,

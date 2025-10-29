@@ -5,7 +5,7 @@ from sqlalchemy import desc
 
 from Usuario import Usuario
 from Ponto import Ponto
-from Veiculos import Porsche
+from Veiculos import Porsche, F1
 
 LARGURA = 640 #define o tamanho da tela
 ALTURA = 700
@@ -172,7 +172,7 @@ class Tela:
 
                 self.tela.blit(txt_nome, (50, y_pos))
                 self.tela.blit(txt_pontos, (300, y_pos))
-                self.tela.blit(txt_data, (420, y_pos))
+                self.tela.blit(txt_tempo, (420, y_pos))
                 y_pos += 40
 
             cor_atual = cor_botao_hover if botao_voltar_rect.collidepoint(mouse) else cor_botao
@@ -407,7 +407,7 @@ class Tela:
                         return "SAIR"
 
     def tela_escolha_carro(self, session):
-        carros_disponiveis = [Porsche]
+        carros_disponiveis = [Porsche, F1]
         selecao_idx = 0
 
         cor_fundo = (0, 0, 0)
@@ -420,9 +420,11 @@ class Tela:
 
         imagens_carros = []
         for classe_carro in carros_disponiveis:
-            # Instancia temporariamente para pegar a imagem e dados
             carro_temp = classe_carro(0, 0)
-            img = pygame.transform.scale(carro_temp.imagem, (100, 210))  # Tamanho para exibição
+            largura_exibicao = 100
+            proporcao = carro_temp.imagem.get_height() / carro_temp.imagem.get_width()
+            altura_exibicao = int(largura_exibicao * proporcao)
+            img = pygame.transform.scale(carro_temp.imagem, (largura_exibicao, altura_exibicao))  # Tamanho para exibição
             imagens_carros.append((img, carro_temp.nome, carro_temp.descricao))
 
         while True:
