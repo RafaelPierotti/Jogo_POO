@@ -5,10 +5,11 @@ from Objetos import Objetos
 
 
 class Obstaculo(Objetos):
-    def __init__(self, largura_tela, altura_tela, caminho, largura=100, altura=150, vel_y=5): #construtor
+    def __init__(self, largura_tela, altura_tela, caminho, largura=100, altura=150, vel_y_base=5): #construtor
         self.largura_tela = largura_tela
         self.altura_tela = altura_tela
-        self.vel_y = vel_y
+        self.vel_y_base = vel_y_base
+        self.vel_y = vel_y_base
         self.parado = False #pausa movimento do obstaculo
         self.imagem = pygame.image.load(caminho)
         self.imagem = pygame.transform.scale(self.imagem, (largura, altura))
@@ -17,10 +18,11 @@ class Obstaculo(Objetos):
         self.rect = self.imagem.get_rect(topleft=(x, y))#posiciona obstaculo
         self.rect.inflate_ip(-30, -40)
 
-    def atualizar(self):
+    def atualizar(self, velocidade_jogo):
+        self.vel_y = velocidade_jogo  # Atualiza a velocidade atual para a lógica de colisão
         if not self.parado:  # só se move se não estiver parado
-            self.rect.y += self.vel_y
-            if self.rect.top > self.altura_tela: #saiu da tela volta para cima
+            self.rect.y += self.vel_y  # Usa a velocidade vinda do Main
+            if self.rect.top > self.altura_tela:  # saiu da tela volta para cima
                 self.reposicionar()
 
     def reposicionar(self): #recomeça de cima
@@ -31,13 +33,9 @@ class Obstaculo(Objetos):
         tela.blit(self.imagem, self.rect)
 
     def colidiu(self, carro_rect):
-        colisao_x = (carro_rect.left < self.rect.right) and (carro_rect.right > self.rect.left)
-
-        if not colisao_x:
+        if not carro_rect.colliderect(self.rect):
             return False
 
-        acertou_topo = self.rect.bottom >= carro_rect.top
+        is_spawn_kill = carro_rect.top > self.rect.bottom
 
-        colisao_fresca = self.rect.bottom <= (carro_rect.top + self.vel_y)
-
-        return colisao_x and acertou_topo and colisao_fresca
+        return not is_spawn_kill

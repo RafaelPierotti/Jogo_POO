@@ -2,11 +2,12 @@ import pygame
 from random import randint
 
 class Moeda:
-    def __init__(self, largura_tela, altura_tela, tamanho=50, vel_y=5):
+    def __init__(self, largura_tela, altura_tela, tamanho=50, vel_y_base=5):
         self.largura_tela = largura_tela
         self.altura_tela = altura_tela
         self.tamanho = tamanho
-        self.vel_y = vel_y
+        self.vel_y_base = vel_y_base
+        self.vel_y = vel_y_base
 
         # Posição inicial aleatória
         self.x = randint(100, 470)
@@ -19,11 +20,11 @@ class Moeda:
         # Retângulo de colisão
         self.rect = self.imagem.get_rect(center=(self.x, self.y))
 
-    def atualizar(self):
-        self.y += self.vel_y
+    def atualizar(self, velocidade_jogo):
+        self.vel_y = velocidade_jogo  # Atualiza a velocidade atual
+        self.y += self.vel_y  # Usa a velocidade vinda do Main
         self.rect.centery = self.y
 
-        # Quando sair da tela, reposiciona
         if self.y > self.altura_tela:
             self.reposicionar()
 

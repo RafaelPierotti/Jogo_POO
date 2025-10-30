@@ -20,6 +20,9 @@ class Carro(Objetos):
         self.invencivel = False
         self.invencivel_timer = 0
 
+        self.limite_pista_esq = 100
+        self.limite_pista_dir = 540
+
 
     def mover(self, teclas, esquerda, direita): #metodo de movimentação
         limite_pista_esq = 100
@@ -60,3 +63,6 @@ class Carro(Objetos):
         self.vida_atual = self.vida_maxima
         self.invencivel = False
         self.invencivel_timer = 0
+
+    def esta_na_grama(self):
+        return self.rect.left < self.limite_pista_esq or self.rect.right > self.limite_pista_dir

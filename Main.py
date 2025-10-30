@@ -32,6 +32,10 @@ altura = 700
 DISTANCIA_MINIMA = 200
 velocidade = 120
 
+VELOCIDADE_JOGO_NORMAL = 8
+VELOCIDADE_JOGO_LENTA = 3
+velocidade_jogo_global = VELOCIDADE_JOGO_NORMAL
+
 tela = Tela(largura, altura)
 moeda = Moeda(largura_tela=largura, altura_tela=altura)
 musica_moeda = pygame.mixer.Sound('assets/smw_coin.wav')
@@ -92,12 +96,13 @@ while True:
         teclas = pygame.key.get_pressed()
         carro.mover(teclas, esquerda=pygame.K_a, direita=pygame.K_d)
 
-        if carro.rect.left < 0:
-            carro.rect.left = 0
-        if carro.rect.right > largura:
-            carro.rect.right = largura
+        if carro.esta_na_grama():
+            velocidade_jogo_global = VELOCIDADE_JOGO_LENTA
+        else:
+            velocidade_jogo_global = VELOCIDADE_JOGO_NORMAL
 
-        tela.desenhar_fundo()
+
+        tela.desenhar_fundo(velocidade_jogo_global)
         carro.desenhar(tela.tela)
 
         colisao = False
@@ -134,10 +139,10 @@ while True:
                 exit()
 
         for obstaculo in obstaculos:
-            obstaculo.atualizar()
+            obstaculo.atualizar(velocidade_jogo_global)
             obstaculo.desenhar(tela.tela)
 
-        moeda.atualizar()
+        moeda.atualizar(velocidade_jogo_global)
 
         for obstaculo in obstaculos:
             if moeda.rect.colliderect(obstaculo.rect):
