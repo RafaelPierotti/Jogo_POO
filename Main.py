@@ -39,6 +39,7 @@ velocidade_jogo_global = VELOCIDADE_JOGO_NORMAL
 tela = Tela(largura, altura)
 moeda = Moeda(largura_tela=largura, altura_tela=altura)
 musica_moeda = pygame.mixer.Sound('assets/smw_coin.wav')
+musica_game_over = pygame.mixer.Sound('assets/game_over.wav')
 
 obstaculos = [
     Obstaculo(largura, altura, "assets/parede.png"),
@@ -119,6 +120,8 @@ while True:
                     break
 
         if colisao:
+            musica_game_over.play()
+
             end_time_ticks = pygame.time.get_ticks()
             duracao_segundos = (end_time_ticks - start_time_ticks) // 1000
 
