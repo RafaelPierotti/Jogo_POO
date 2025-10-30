@@ -11,7 +11,7 @@ class Lambo(Carro):
                          vida_maxima=3,
                          vel_normal=7,
                          vel_lenta=5)
-        self.nome = "Lamborguini"
+        self.nome = "Lamborghini"
         self.descricao = ["Velocidade: Alta", "Resistência: Baixa"]
 
         tamanho_in_game = (140, 150)
