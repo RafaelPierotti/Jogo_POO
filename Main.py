@@ -40,6 +40,7 @@ tela = Tela(largura, altura)
 moeda = Moeda(largura_tela=largura, altura_tela=altura)
 musica_moeda = pygame.mixer.Sound('assets/smw_coin.wav')
 musica_game_over = pygame.mixer.Sound('assets/game_over.wav')
+musica_game_over.set_volume(0.5)
 
 obstaculos = [
     Obstaculo(largura, altura, "assets/parede.png"),
@@ -96,6 +97,11 @@ while True:
 
         teclas = pygame.key.get_pressed()
         carro.mover(teclas, esquerda=pygame.K_a, direita=pygame.K_d)
+
+        if carro.rect.left < 0:
+            carro.rect.left = 0
+        if carro.rect.right > largura:
+            carro.rect.right = largura
 
         if carro.esta_na_grama():
             velocidade_jogo_global = VELOCIDADE_JOGO_LENTA
