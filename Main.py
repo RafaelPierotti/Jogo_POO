@@ -10,7 +10,7 @@ from Obstaculo import Obstaculo
 
 from Database import session
 
-from Veiculos import Lambo, F1
+from Veiculos import Lambo, F1, Fusca
 
 def reiniciar_jogo(carro, obstaculos, largura, altura, dist_minima):
     carro.rect.centerx = largura // 2

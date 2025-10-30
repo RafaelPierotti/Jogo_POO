@@ -5,7 +5,7 @@ from sqlalchemy import desc
 
 from Usuario import Usuario
 from Ponto import Ponto
-from Veiculos import Lambo, F1
+from Veiculos import Lambo, F1, Fusca
 
 LARGURA = 640 #define o tamanho da tela
 ALTURA = 700
@@ -423,7 +423,7 @@ class Tela:
                         return "SAIR"
 
     def tela_escolha_carro(self, session):
-        carros_disponiveis = [Lambo, F1]
+        carros_disponiveis = [Lambo, F1, Fusca]
         selecao_idx = 0
 
         cor_fundo = (0, 0, 0)

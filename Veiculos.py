@@ -3,7 +3,8 @@ from Carro import Carro
 
 IMG_LAMBO = 'assets/lambo.png'
 IMG_F1 = 'assets/jogo_carro.png'
-IMG_FUSCA 'assets/
+IMG_FUSCA = 'assets/fusca.png'
+
 class Lambo(Carro):
     def __init__(self,x, y):
         super().__init__(x, y, IMG_LAMBO,
@@ -42,16 +43,16 @@ class F1(Carro):
         self.rect.x = x
         self.rect.y = y 
        
-        class Fusca(Carro):
+class Fusca(Carro):
     def __init__(self,x, y):
         super().__init__(x, y, IMG_FUSCA,
                          vida_maxima=5,
-                         vel_normal=10,
+                         vel_normal=8,
                          vel_lenta=6)
         self.nome = "Fusca"
         self.descricao = ["Velocidade: Baixa", "Resistência: ALta"]
 
-        tamanho_in_game = (80, 168)
+        tamanho_in_game = (159, 168)
 
         # Cria a imagem do jogo e o rect
         self.imagem = pygame.transform.scale(self.imagem_original, tamanho_in_game)
