@@ -50,7 +50,7 @@ class Fusca(Carro):
                          vel_normal=8,
                          vel_lenta=6)
         self.nome = "Fusca"
-        self.descricao = ["Velocidade: Baixa", "Resistência: ALta"]
+        self.descricao = ["Velocidade: Baixa", "Resistência: Alta"]
 
         tamanho_in_game = (159, 168)
 

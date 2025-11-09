@@ -29,12 +29,12 @@ class Tela:
 
         self.fonte_input = pygame.font.SysFont('Arial', 35, True, False)
         self.fonte_botao_grande = pygame.font.SysFont('Arial', 40, True, False)
-        self.fonte_botao_media = pygame.font.SysFont('Arial', 35, True)
+        self.fonte_botao_media = pygame.font.SysFont('Arial', 22, True)
         self.fonte_titulo_grande = pygame.font.SysFont('Arial', 50, True)
         self.fonte_titulo_gameover = pygame.font.SysFont('Impact', 70)  # <--- Fonte mantida para Game Over
         self.fonte_pontos = pygame.font.SysFont('Arial', 28)
         self.fonte_titulo_pontos = pygame.font.SysFont('Arial', 40, True)
-        self.fonte_desc = pygame.font.SysFont('Arial', 24)
+        self.fonte_desc = pygame.font.SysFont('Arial', 19)
 
     def desenhar_fundo(self, velocidade_jogo):
         self.fundo_y1 += velocidade_jogo
@@ -424,6 +424,7 @@ class Tela:
 
     def tela_escolha_carro(self, session):
         carros_disponiveis = [Lambo, F1, Fusca]
+        selecao_idx = 0
         selecao_idx = 0
 
         cor_fundo = (0, 0, 0)
