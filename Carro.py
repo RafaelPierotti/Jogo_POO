@@ -17,20 +17,19 @@ class Carro(Objetos):
         self.vida_maxima = vida_maxima
         self.vida_atual = vida_maxima
 
-        self.invencivel = False
-        self.invencivel_timer = 0
+        self.__invencivel = False
+        self.__invencivel_timer = 0
 
-        self.limite_pista_esq = 100
-        self.limite_pista_dir = 540
+        self.__limite_pista_esq = 100
+        self.__limite_pista_dir = 540
 
 
     def mover(self, teclas, esquerda, direita): #metodo de movimentação
-        limite_pista_esq = 100
-        limite_pista_direita = 540
+
 
         velocidade_atual = self.velocidade_normal
 
-        if self.rect.left < limite_pista_esq or self.rect.right > limite_pista_direita:
+        if self.esta_na_grama():
             velocidade_atual = self.velocidade_lenta
 
         if teclas[esquerda]:
@@ -39,12 +38,12 @@ class Carro(Objetos):
             self.rect.x += 10 # movimenta 10 para direita
 
     def desenhar(self, tela): #metodo para desenhar veículo
-        if self.invencivel:
-            self.invencivel_timer -= 1
-            if self.invencivel_timer <= 0:
-                self.invencivel = False
+        if self.__invencivel:
+            self.__invencivel_timer -= 1
+            if self.__invencivel_timer <= 0:
+                self.__invencivel = False
 
-            if self.invencivel_timer % 4 < 2:
+            if self.__invencivel_timer % 4 < 2:
                 pass
             else:
                 tela.blit(self.imagem, self.rect)
@@ -52,17 +51,17 @@ class Carro(Objetos):
             tela.blit(self.imagem, self.rect)
 
     def receber_dano(self, dano):
-        if not self.invencivel:
+        if not self.__invencivel:
             self.vida_atual -= dano
-            self.invencivel = True
-            self.invencivel_timer = 60
+            self.__invencivel = True
+            self.__invencivel_timer = 60
             return True
         return False
 
     def resetar_vida(self):
         self.vida_atual = self.vida_maxima
-        self.invencivel = False
-        self.invencivel_timer = 0
+        self.__invencivel = False
+        self.__invencivel_timer = 0
 
     def esta_na_grama(self):
-        return self.rect.left < self.limite_pista_esq or self.rect.right > self.limite_pista_dir
+        return self.rect.left < self.__limite_pista_esq or self.rect.right > self.__limite_pista_dir

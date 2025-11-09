@@ -6,8 +6,8 @@ class Moeda:
         self.largura_tela = largura_tela
         self.altura_tela = altura_tela
         self.tamanho = tamanho
-        self.vel_y_base = vel_y_base
-        self.vel_y = vel_y_base
+        self.__vel_y_base = vel_y_base
+        self.vel_y = self.__vel_y_base
 
         # Posição inicial aleatória
         self.x = randint(100, 470)

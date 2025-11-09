@@ -20,8 +20,8 @@ class Tela:
         #Fundo da tela
         self.fundo_img = pygame.image.load('assets/estrada.png').convert() #pega imagem da estrada
         self.fundo_img = pygame.transform.scale(self.fundo_img, (largura, altura))
-        self.fundo_y1 = 0
-        self.fundo_y2 = -self.altura
+        self.__fundo_y1 = 0
+        self.__fundo_y2 = -self.altura
 
 
         self.logo = pygame.image.load("assets/logo1.png").convert_alpha()
@@ -37,20 +37,20 @@ class Tela:
         self.fonte_desc = pygame.font.SysFont('Arial', 19)
 
     def desenhar_fundo(self, velocidade_jogo):
-        self.fundo_y1 += velocidade_jogo
-        self.fundo_y2 += velocidade_jogo
+        self.__fundo_y1 += velocidade_jogo
+        self.__fundo_y2 += velocidade_jogo
 
         # Se a primeira imagem saiu completamente da tela, reposiciona ela
-        if self.fundo_y1 >= self.altura:
-            self.fundo_y1 = -self.altura
+        if self.__fundo_y1 >= self.altura:
+            self.__fundo_y1 = -self.altura
 
         # Se a segunda imagem saiu completamente da tela, reposiciona ela
-        if self.fundo_y2 >= self.altura:
-            self.fundo_y2 = -self.altura
+        if self.__fundo_y2 >= self.altura:
+            self.__fundo_y2 = -self.altura
 
         # Desenha as duas imagens na tela
-        self.tela.blit(self.fundo_img, (0, self.fundo_y1))
-        self.tela.blit(self.fundo_img, (0, self.fundo_y2))
+        self.tela.blit(self.fundo_img, (0, self.__fundo_y1))
+        self.tela.blit(self.fundo_img, (0, self.__fundo_y2))
 
     def atualizar(self):  # atualiza tudo o que foi desenhado até o momento
         pygame.display.update()

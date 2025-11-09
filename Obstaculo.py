@@ -8,8 +8,8 @@ class Obstaculo(Objetos):
     def __init__(self, largura_tela, altura_tela, caminho, largura=100, altura=150, vel_y_base=5): #construtor
         self.largura_tela = largura_tela
         self.altura_tela = altura_tela
-        self.vel_y_base = vel_y_base
-        self.vel_y = vel_y_base
+        self.__vel_y_base = vel_y_base
+        self.vel_y = self.__vel_y_base
         self.parado = False #pausa movimento do obstaculo
         self.imagem = pygame.image.load(caminho)
         self.imagem = pygame.transform.scale(self.imagem, (largura, altura))
